@@ -1,0 +1,7 @@
+<launch>
+  <node pkg="joy" type="joy_node" name="joy_node" output="screen" />
+  <node pkg="xbox_control_system" type="controller_node.py" name="controller_node" output="screen" />
+  <node pkg="xbox_control_system" type="task1_node.py" name="task1_node" output="screen" />
+  <node pkg="xbox_control_system" type="task2_node.py" name="task2_node" output="screen" />
+  <node pkg="xbox_control_system" type="task3_node.py" name="task3_node" output="screen" />
+</launch>

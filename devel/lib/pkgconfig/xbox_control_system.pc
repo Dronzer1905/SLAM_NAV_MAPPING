@@ -1,0 +1,8 @@
+prefix=/home/robot/xbox_ws/devel
+
+Name: xbox_control_system
+Description: Description of xbox_control_system
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 

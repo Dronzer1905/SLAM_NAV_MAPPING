@@ -1,0 +1,43 @@
+#!/usr/bin/env python
+
+import rospy
+from std_msgs.msg import String
+import evdev
+
+DEVICE_PATH = '/dev/input/event2'  # Change this to your Bluetooth controller event device
+
+# Map evdev key codes for just A, B, X, Y buttons
+BUTTON_MAP = {
+    304: "A",  # BTN_SOUTH
+    305: "B",  # BTN_EAST
+    307: "X",  # BTN_NORTH
+    308: "Y",  # BTN_WEST
+}
+
+def main():
+    rospy.init_node('controller_node')
+    pub = rospy.Publisher('/xbox_button', String, queue_size=10)
+
+    try:
+        device = evdev.InputDevice(DEVICE_PATH)
+        rospy.loginfo(f"Listening to device: {device.name}")
+    except Exception as e:
+        rospy.logerr(f"Cannot open device {DEVICE_PATH}: {e}")
+        return
+
+    for event in device.read_loop():
+        if rospy.is_shutdown():
+            break
+
+        # Only look for key press (value == 1)
+        if event.type == evdev.ecodes.EV_KEY and event.value == 1:
+            button_name = BUTTON_MAP.get(event.code)
+            if button_name:
+                rospy.loginfo(f"Button pressed: {button_name}")
+                pub.publish(button_name)
+
+if __name__ == '__main__':
+    try:
+        main()
+    except rospy.ROSInterruptException:
+        pass
